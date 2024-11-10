@@ -25,13 +25,32 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew assembleRelease
-  
+    - name: Find APK Path
+      id: find-apk
+      run: |
+        APK_PATH=$(find app/build -type f -name "*.apk" | head -n 1)
+        if [ -z "$APK_PATH" ]; then
+          echo "No APK found!"
+          exit 1
+        fi
+        echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+        echo "Found APK: $APK_PATH"
+
+    - name: Verify APK exists
+      run: |
+        if [ ! -f "${{ env.APK_PATH }}" ]; then
+          echo "APK not found at ${{ env.APK_PATH }}"
+          exit 1
+        fi
+        echo "APK verified at ${{ env.APK_PATH }}"
+
     - name: Upload APK to Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: 'app/build/outputs/apk/release/app-release.apk'
+        artifacts: ${{ env.APK_PATH }}
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: 'v1.0.${{ github.run_number }}'
         releaseName: 'Release v1.0.${{ github.run_number }}'
         draft: false
         prerelease: false
+
