@@ -1,0 +1,31 @@
+name: Android Build and Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Build with Gradle
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK to Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'app/build/outputs/apk/release/app-release.apk'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: 'v1.0.${{ github.run_number }}'
+          releaseName: 'Release v1.0.${{ github.run_number }}'
+          draft: false
+          prerelease: false
