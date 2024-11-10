@@ -61,11 +61,11 @@ public class MainHook implements IXposedHookLoadPackage {
 
 
     public static final int BAND_5GHZ = 1 << 1;
-    public static final int CHANNEL_WIDTH_320MHZ = 11;
+    public static final int CHANNEL_WIDTH_80MHZ = 4;
     // channel: 149,153,157,161,165
     // freq:    5745,5765,5785,5805,5825
     private static HashSet<Integer> AvailableChannelSet_LOW = new HashSet<>(Arrays.asList(36, 40, 44));
-    private static HashSet<Integer> AvailableChannelSet_HIGH = new HashSet<>(Arrays.asList(149, 153, 157, 161, 165));
+    private static HashSet<Integer> AvailableChannelSet_HIGH = new HashSet<>(Arrays.asList(149));
 //    private static HashSet<Integer> AvailableChannelFreqSet = new HashSet<>(Arrays.asList(5745, 5765, 5785, 5805, 5825));
 
     static {
@@ -191,11 +191,11 @@ public class MainHook implements IXposedHookLoadPackage {
                                     int channel5gIndex = channels.indexOfKey(BAND_5GHZ);
 
                                     Set<Integer> allowedAcsChannels5g = (Set<Integer>) param.args[21];
-//                                    int maxChannelBandwidth = (int) param.args[23];
-//                                    XposedBridge.log("["+TAG+"] orig channel5gIndex " + channel5gIndex);
-//                                    XposedBridge.log("["+TAG+"] orig channels " + channels);
-//                                    XposedBridge.log("["+TAG+"] orig allowedAcsChannels5g " + allowedAcsChannels5g);
-//                                    XposedBridge.log("["+TAG+"] orig maxChannelBandwidth " + maxChannelBandwidth);
+                                   int maxChannelBandwidth = (int) param.args[23];
+                                   XposedBridge.log("["+TAG+"] orig channel5gIndex " + channel5gIndex);
+                                   XposedBridge.log("["+TAG+"] orig channels " + channels);
+                                   XposedBridge.log("["+TAG+"] orig allowedAcsChannels5g " + allowedAcsChannels5g);
+                                   XposedBridge.log("["+TAG+"] orig maxChannelBandwidth " + maxChannelBandwidth);
 
                                     // config has set 5G channel
                                     if (channel5gIndex >= 0) {
@@ -206,7 +206,7 @@ public class MainHook implements IXposedHookLoadPackage {
                                             // 5G ACS channels
                                             param.args[21] = AvailableChannelSet_HIGH;
                                             // max bandwidth
-                                            param.args[23] = CHANNEL_WIDTH_320MHZ;
+                                            param.args[23] = CHANNEL_WIDTH_80MHZ;
                                         }
                                     }
                                 }
