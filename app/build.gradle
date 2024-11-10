@@ -26,6 +26,14 @@ android {
     namespace 'com.xhy.xp.softaphelper'
 }
 
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://api.xposed.info' }
+}
+
+
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
 }
