@@ -3,6 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://api.xposed.info'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.2'
